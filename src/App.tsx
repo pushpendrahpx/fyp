@@ -1,13 +1,19 @@
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
+  IonButton,
   IonIcon,
   IonLabel,
+  IonRedirect,
+  IonRouterLink,
   IonRouterOutlet,
+  IonSpinner,
   IonTabBar,
   IonTabButton,
   IonTabs,
-  setupIonicReact
+  setupIonicReact,
+  useIonRouter,
+  useIonToast
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { ellipse, square, triangle } from 'ionicons/icons';
@@ -33,44 +39,82 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import Login from './pages/Login/Login.component';
+
+import { useEffect, useState } from 'react';
+import Signup from './pages/Signup/Signup.component';
+import { useSelector } from 'react-redux';
+import { RootState } from './redux/store';
+import { firebaseAuth, firebaseStore } from './redux/firebase/firebaseSlice';
+import { useDispatch } from 'react-redux';
+import { saveUser, signOut, updateDevices } from './redux/user/userSlice';
+import HomeIndex from './pages/Home';
+
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route exact path="/tab1">
-            <Tab1 />
-          </Route>
-          <Route exact path="/tab2">
-            <Tab2 />
-          </Route>
-          <Route path="/tab3">
-            <Tab3 />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/tab1" />
-          </Route>
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
-            <IonIcon icon={triangle} />
-            <IonLabel>Tab 1</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab2" href="/tab2">
-            <IonIcon icon={ellipse} />
-            <IonLabel>Tab 2</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab3" href="/tab3">
-            <IonIcon icon={square} />
-            <IonLabel>Tab 3</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () =>{
+  let dispatch = useDispatch()
+  let state = useSelector((state:RootState)=>state).userReducer
+  let [isLoggedIn,setIsLoggedIn] = useState(false);
 
+
+  
+  const [present] = useIonToast();
+  let router = useIonRouter()
+  const [isLoaded,setIsLoaded] = useState(false)
+
+  useEffect(()=>{
+    console.log(state)
+
+      firebaseAuth.onAuthStateChanged(firebaseAuth.getAuth(),  (user) => {
+        if (user) { 
+          dispatch(saveUser(user))
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          // const uid = user.uid;
+          // ...
+          
+          router.push('/home')
+          setIsLoaded(true)
+        } else {
+          console.log('signedout')
+          // User is signed out
+          // ...
+          router.push('/login')
+          
+          setIsLoaded(true)
+        }
+      })
+    },[])
+    useEffect(()=>{
+      console.log(isLoggedIn,state.isLoggedIn)
+      setIsLoggedIn(state.isLoggedIn)
+    },[state])
+    useEffect(()=>{
+      console.log(isLoggedIn)
+    },[isLoggedIn]);
+
+  console.log({isLoggedIn})
+  return  (
+    <IonApp>
+      {isLoaded === true ? 
+                  <><Route exact path="/signup">
+                  <Signup/>
+                </Route>
+                <Route exact path="/login">
+                <Login />
+                </Route> 
+                <Route path='/home'> <HomeIndex /> </Route> 
+                 
+
+              </>
+                 
+                  
+        : 
+        <IonSpinner name="lines-sharp"></IonSpinner>}
+    </IonApp>
+  );
+  
+}
 export default App;

@@ -3,12 +3,23 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+import { IonReactRouter } from '@ionic/react-router';
+
+
+
+
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <IonReactRouter>
+      <App />
+      </IonReactRouter>
+    </Provider>
   </React.StrictMode>
 );
 
