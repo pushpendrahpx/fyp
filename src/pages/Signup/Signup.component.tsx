@@ -43,7 +43,7 @@ const Signup : React.FC = () => {
                 position: 'bottom'
               });
             let userobj = JSON.parse(JSON.stringify( new User(user.user)))
-            
+            //   console.log(userobj)
               let doc = firebaseStore.doc(firebaseStore.collection(firebaseStore.getFirestore(), 'users'),user.user.uid);
             //   firebaseStore.addDoc(firebaseStore.collection(firebaseStore.getFirestore(), 'users'), userobj)
               firebaseStore.setDoc(doc,userobj)

@@ -16,7 +16,6 @@ let HomeIndex = ()=>{
 
     },[])
     return <div>
-        <IonNav root={()=>
         <IonTabs>
             
             <IonRouterOutlet>
@@ -43,7 +42,7 @@ let HomeIndex = ()=>{
                     <IonLabel>Settings</IonLabel>
                 </IonTabButton>
             </IonTabBar>
-        </IonTabs>}></IonNav>
+        </IonTabs>
     </div>
 }
 export default HomeIndex;

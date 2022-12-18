@@ -8,7 +8,34 @@ export class User{
 
     constructor(data:any){
         this.info = data;
-        this.devices = []
+        this.devices = [
+            {
+                id:0,
+                name:"Device 0",
+                state:false,
+                values:[{current:1.34,timestamp: String(new Date())}],
+                currentValue:{current:1.34,timestamp: String(new Date())}
+                
+            },{
+                id:1,
+                name:"Device 1",
+                state:false,
+                values:[{current:1.34,timestamp: String(new Date())}],
+                currentValue:{current:1.34,timestamp: String(new Date())}
+            },{
+                id:2,
+                name:"Device 2",
+                state:false,
+                values:[{current:1.34,timestamp: String(new Date())}],
+                currentValue:{current:1.34,timestamp: String(new Date())}
+            },{
+                id:3,
+                name:"Device 3",
+                state:false,
+                values:[{current:1.34,timestamp: String(new Date())}],
+                currentValue:{current:1.34,timestamp: String(new Date())}
+            },
+        ]
         this.isLoggedIn = true;
         
     }
