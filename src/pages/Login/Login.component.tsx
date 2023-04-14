@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonGrid, IonInput, IonItem, IonLabel, IonRouterLink, IonRow, IonText, useIonRouter, useIonToast } from "@ionic/react";
+import { IonButton, IonCol, IonGrid, IonImg, IonInput, IonItem, IonLabel, IonRouterLink, IonRow, IonText, useIonLoading, useIonRouter, useIonToast } from "@ionic/react";
 import { getAuth } from "firebase/auth";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -6,16 +6,18 @@ import { useSelector } from "react-redux";
 import { firebaseAuth, firebaseStore } from "../../redux/firebase/firebaseSlice";
 import { RootState } from "../../redux/store";
 import { saveUser } from "../../redux/user/userSlice";
-
+import SaveEnergySVG from "./../../assets/saveenergy.svg"
 const Login: React.FC = () => {
+
+  const [presentLoading, dismiss] = useIonLoading();
     let [formState,setFormState] = useState({
         email: "",
         password:""
     })
     useEffect(()=>{
         setFormState({
-            email: "askillys@gmail.com",
-            password:"googleuser"
+            email: "u19ee003@eed.svnit.ac.in",
+            password:"test123"
         })
     },[])
     let router = useIonRouter()
@@ -33,6 +35,9 @@ const Login: React.FC = () => {
     }
     let formSubmitHandle = (e:FormEvent)=>{
         e.preventDefault();
+        presentLoading({
+            message: 'Trying to log in'
+          })
         console.log(e.target)
         firebaseAuth.signInWithEmailAndPassword(firebaseAuth.getAuth(), formState.email, formState.password)
         .then((user)=>{
@@ -46,7 +51,17 @@ const Login: React.FC = () => {
             console.log(user)
             dispatch(saveUser(user))
 
+            dismiss()
             router.push('/home')
+        })
+        .catch(error=>{
+             
+            dismiss()
+            present({
+                message: error,
+                duration: 1500,
+                position: 'bottom'
+              });
         })
     }
     return (
@@ -54,6 +69,7 @@ const Login: React.FC = () => {
             <IonGrid style={{textAlign:'center'}}>
                 <IonRow>
                     <IonCol>
+                        <IonImg src={SaveEnergySVG} alt={'brand'}></IonImg>
                     <IonText color="primary">
                         <h1>Final Year Project : Login</h1>
                     </IonText>

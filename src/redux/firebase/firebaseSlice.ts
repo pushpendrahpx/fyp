@@ -9,6 +9,7 @@ import firebase, { initializeApp } from "firebase/app";
 import { Analytics, getAnalytics } from "firebase/analytics";
 import * as auth from 'firebase/auth';
 import * as firestore from 'firebase/firestore';
+import * as rtdb from "firebase/database"
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -42,6 +43,7 @@ export const firebaseApp = initializeApp(firebaseConfig);
 
 export const firebaseAuth = auth;
 export const firebaseStore = firestore;
+export const firebaseRTDB = rtdb;
 
 // Define the initial state using that type
 const initialState = {

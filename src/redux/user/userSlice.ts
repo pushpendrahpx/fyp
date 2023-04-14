@@ -1,24 +1,24 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../store';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { RootState } from "../store";
 
 // Define a type for the slice state
 export interface UserState {
-  isLoggedIn:boolean,
-  name: string,
-  devices:Array<any>,
-  creds:Object
+  isLoggedIn: boolean;
+  name: string;
+  devices: Array<any>;
+  creds: any;
 }
 
 // Define the initial state using that type
 const initialState: UserState = {
-  isLoggedIn:false,
-  name:'',
-  devices:[],
-  creds:{}
-}
+  isLoggedIn: false,
+  name: "",
+  devices: [],
+  creds: {},
+};
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
@@ -32,25 +32,36 @@ export const userSlice = createSlice({
     // incrementByAmount: (state, action: PayloadAction<number>) => {
     //   state.value += action.payload
     // }
-    saveUser:(state, action:PayloadAction<any>)=>{
+    saveUser: (state, action: PayloadAction<any>) => {
       state.isLoggedIn = true;
       state.creds = action.payload;
     },
-    signOut:(state)=>{
+    signOut: (state) => {
       state.isLoggedIn = false;
-      state.creds = {}
+      state.creds = {};
+      state.devices = [];
+      state.name = "";
     },
-    updateDevices: (state,action:PayloadAction<any>)=>{
-      console.log(action)
+    updateDevices: (state, action: PayloadAction<any>) => {
+      console.log(action);
       state.devices = action.payload;
-    }
+    },
+    updateDevice: (state, action: PayloadAction<any>) => {
+      let tmp = [...state.devices];
+      for (let i = 0; i < tmp.length; i++) {
+        if (tmp[i].id === action.payload.id) {
+          tmp[i] = action.payload;
+        }
+      }
+      state.devices = tmp;
+    },
+  },
+});
 
-  }
-})
-
-export const { signOut,saveUser, updateDevices } = userSlice.actions
+export const { signOut, saveUser, updateDevices, updateDevice } =
+  userSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 // export const selectCount = (state: RootState) => state.counter.value
 
-export default userSlice.reducer
+export default userSlice.reducer;
