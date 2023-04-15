@@ -81,7 +81,7 @@ const App: React.FC = () => {
     );
   }, [state.devices]);
   useEffect(() => {
-    console.log(state);
+    // console.log(state);
 
     firebaseAuth.onAuthStateChanged(firebaseAuth.getAuth(), async (user) => {
       if (user) {
@@ -97,7 +97,7 @@ const App: React.FC = () => {
         );
         onValue(deviceRef, (snapshot) => {
           const data = snapshot.val();
-          console.log(data);
+          // console.log(data);
           dispatch(updateDevices(data));
         });
         // const usersRef = doc(firebaseStore.getFirestore(), "users", user.uid);
